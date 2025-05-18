@@ -1,3 +1,4 @@
+import { Link } from "wouter";
 import { HeaderProps } from "@/lib/types";
 import { useTranslation } from "react-i18next";
 import LanguageSelector from "./LanguageSelector";
@@ -23,10 +24,15 @@ export default function Header({ onAddFeatureClick }: HeaderProps) {
               />
             </svg>
           </div>
-          <h1 className="text-xl font-bold">{t('header.title')}</h1>
+          <Link href="/">
+            <span className="text-xl font-bold cursor-pointer">{t('header.title')}</span>
+          </Link>
         </div>
         <div className="flex items-center space-x-3">
           <LanguageSelector />
+          <Link href="/admin">
+            <a className="text-gray-600 hover:text-accent transition-colors font-medium">Admin</a>
+          </Link>
           <button 
             onClick={onAddFeatureClick}
             className="bg-accent hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 ease-in-out"

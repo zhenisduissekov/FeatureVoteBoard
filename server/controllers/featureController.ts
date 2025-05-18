@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { storage } from "../storage";
 import { fromZodError } from "zod-validation-error";
-import { insertFeatureSchema, FeatureStatus } from "@shared/schema";
+import { insertFeatureSchema } from "@shared/schema";
 
 // Get all features
 export const getAllFeatures = async (req: Request, res: Response) => {
@@ -63,7 +63,7 @@ export const updateFeatureStatus = async (req: Request, res: Response) => {
     const { status } = req.body;
     
     // Validate status
-    if (!status || !Object.values(FeatureStatus.Values).includes(status)) {
+    if (!status || !["pending", "in-progress", "approved", "done", "canceled"].includes(status)) {
       return res.status(400).json({ 
         message: "Invalid status. Must be one of: pending, in-progress, approved, done, canceled" 
       });
