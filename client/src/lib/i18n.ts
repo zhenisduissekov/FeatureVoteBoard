@@ -64,7 +64,7 @@ const enTranslations = {
 // Russian translations
 const ruTranslations = {
   header: {
-    title: 'ГолосФункций',
+    title: 'Голосование за функцию',
     addFeature: 'Добавить функцию',
     language: 'Язык'
   },
