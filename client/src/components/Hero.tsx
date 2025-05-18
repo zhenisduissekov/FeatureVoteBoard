@@ -30,7 +30,7 @@ export default function Hero({ onSortChange, onFilterChange }: HeroProps) {
               </Select>
               
               <Select onValueChange={onFilterChange} defaultValue="all">
-                <SelectTrigger className="bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                <SelectTrigger className="w-[150px] bg-gray-50 border border-gray-200 text-gray-700 text-sm rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
                   <SelectValue placeholder="Filter by" />
                 </SelectTrigger>
                 <SelectContent>
