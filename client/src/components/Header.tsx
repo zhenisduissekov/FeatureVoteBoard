@@ -31,7 +31,7 @@ export default function Header({ onAddFeatureClick }: HeaderProps) {
         <div className="flex items-center space-x-3">
           <LanguageSelector />
           <Link href="/admin">
-            <a className="text-gray-600 hover:text-accent transition-colors font-medium">Admin</a>
+            <span className="text-gray-600 hover:text-accent transition-colors font-medium cursor-pointer">Admin</span>
           </Link>
           <button 
             onClick={onAddFeatureClick}
