@@ -1,6 +1,10 @@
 import { HeaderProps } from "@/lib/types";
+import { useTranslation } from "react-i18next";
+import LanguageSelector from "./LanguageSelector";
 
 export default function Header({ onAddFeatureClick }: HeaderProps) {
+  const { t } = useTranslation();
+  
   return (
     <header className="bg-white border-b border-gray-200 sticky top-0 z-10">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -19,14 +23,17 @@ export default function Header({ onAddFeatureClick }: HeaderProps) {
               />
             </svg>
           </div>
-          <h1 className="text-xl font-bold">FeatureVote</h1>
+          <h1 className="text-xl font-bold">{t('header.title')}</h1>
         </div>
-        <button 
-          onClick={onAddFeatureClick}
-          className="bg-accent hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 ease-in-out"
-        >
-          Add Feature
-        </button>
+        <div className="flex items-center space-x-3">
+          <LanguageSelector />
+          <button 
+            onClick={onAddFeatureClick}
+            className="bg-accent hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 ease-in-out"
+          >
+            {t('header.addFeature')}
+          </button>
+        </div>
       </div>
     </header>
   );
