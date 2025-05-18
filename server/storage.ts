@@ -3,8 +3,12 @@ import {
   InsertFeature, 
   FeatureStatus,
   Vote, 
-  InsertVote 
+  InsertVote,
+  features,
+  votes 
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, and } from "drizzle-orm";
 
 export interface IStorage {
   // Feature methods
@@ -19,6 +23,76 @@ export interface IStorage {
   addVote(vote: InsertVote): Promise<Vote>;
 }
 
+// Database storage implementation
+export class DatabaseStorage implements IStorage {
+  async getAllFeatures(): Promise<Feature[]> {
+    return await db.select().from(features);
+  }
+
+  async getFeatureById(id: number): Promise<Feature | undefined> {
+    const result = await db.select().from(features).where(eq(features.id, id));
+    return result.length > 0 ? result[0] : undefined;
+  }
+
+  async createFeature(insertFeature: InsertFeature): Promise<Feature> {
+    const result = await db.insert(features).values({
+      title: insertFeature.title,
+      description: insertFeature.description || "",
+      status: "pending",
+      votes: 0,
+    }).returning();
+    
+    return result[0];
+  }
+
+  async updateFeatureVotes(id: number, voteCount: number): Promise<Feature | undefined> {
+    const result = await db.update(features)
+      .set({ votes: voteCount })
+      .where(eq(features.id, id))
+      .returning();
+    
+    return result.length > 0 ? result[0] : undefined;
+  }
+
+  async updateFeatureStatus(id: number, status: FeatureStatus): Promise<Feature | undefined> {
+    const result = await db.update(features)
+      .set({ status })
+      .where(eq(features.id, id))
+      .returning();
+    
+    return result.length > 0 ? result[0] : undefined;
+  }
+
+  async hasVoted(featureId: number, sessionId: string): Promise<boolean> {
+    const result = await db.select()
+      .from(votes)
+      .where(and(
+        eq(votes.featureId, featureId),
+        eq(votes.sessionId, sessionId)
+      ));
+    
+    return result.length > 0;
+  }
+
+  async addVote(vote: InsertVote): Promise<Vote> {
+    // Add the vote
+    const [newVote] = await db.insert(votes)
+      .values(vote)
+      .returning();
+    
+    // Get the feature
+    const feature = await this.getFeatureById(vote.featureId);
+    
+    if (feature) {
+      // Update the vote count
+      await this.updateFeatureVotes(feature.id, feature.votes + 1);
+    }
+    
+    return newVote;
+  }
+}
+
+// In-memory storage implementation for local development and testing
 export class MemStorage implements IStorage {
   private features: Map<number, Feature>;
   private votes: Map<number, Vote[]>;
@@ -167,4 +241,6 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Choose which storage implementation to use
+// Set to DatabaseStorage to use the database
+export const storage = new DatabaseStorage();
