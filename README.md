@@ -47,6 +47,9 @@ FeatureVoteBoard/
 - **Go** (v1.18+ recommended)
 
 ---
+## 🎥 Preview
+
+![Feature Voting Demo](./demo.gif)
 
 ### 1. Clone the Repository
 
@@ -138,5 +141,5 @@ This project was inspired by the excellent [features.vote](https://features.vote
 
 ---
 
-**Questions?**  
+**Questions?**
 Open an issue or discussion on GitHub!
